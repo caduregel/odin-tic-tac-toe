@@ -10,6 +10,9 @@ const GameBoard = (function () {
 
 const checkGameOver = function () {
     grid = GameBoard.grid
+    gameOver = false
+    winner = 'none'
+
     gridDivided = [
         // Grid rows
         [grid[0], grid[1], grid[2]],
@@ -23,18 +26,68 @@ const checkGameOver = function () {
         [grid[0], grid[4], grid[8]],
         [grid[2], grid[4], grid[6]],
     ]
+
     for (let i = 0; i < gridDivided.length; i++) {
-        console.log(i, gridDivided[i])
         if (gridDivided[i].every(element => element == 'X')) {
             // Returns X has won
-        } else if (gridDivided[i].every(element => element == 'O')){
+            gameOver = true
+            winner = 'X'
+        } else if (gridDivided[i].every(element => element == 'O')) {
             // Returns O has won
+            gameOver = true
+            winner = 'O'
         }
+    }
+
+    if (grid.every(element => element !== '')) {
+        // Returns the game is tied
+        gameOver = true
+        winner = 'tie'
+    }
+    // console.log(gameOver, winner, grid)
+    return { gameOver, winner }
+}
+
+
+
+
+const displayGame = function () {
+    document.getElementById('game-board').innerHTML = ''
+    let gameGrid = GameBoard.grid.map(function (value, index) {
+        const gameCell = document.createElement('div')
+        gameCell.classList.add('cell')
+
+        const gameCellValue = document.createElement('p')
+        gameCellValue.textContent = value
+
+        gameCell.appendChild(gameCellValue)
+        gameCell.addEventListener('click', () => {
+            return index
+        })
+        return gameCell 
+    })
+
+    gameGrid.forEach(function (cell) {
+        document.getElementById('game-board').appendChild(cell)
+    })
+
+
+}()
+
+const playGame = function () {
+    let currentPlayer = 'X'
+
+    while (checkGameOver().gameOver !== true) {
+
+        if (currentPlayer == 'X') {
+            GameBoard.setX(inputValue)
+        } else {
+            GameBoard.setO(inputValue)
+        }
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        checkGameOver()
+        displayGame()
     }
 }
 
-GameBoard.setX(0)
-GameBoard.setX(3)
-GameBoard.setX(6)
-
-checkGameOver()
+// playGame()

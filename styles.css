@@ -1,0 +1,15 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body>div {
+    display: grid;
+    grid-template: repeat(3, 80px) / repeat(3, 80px);
+}
+
+.cell {
+    border: 3px solid black;
+    margin: 5px;
+}
