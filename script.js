@@ -8,6 +8,10 @@ const GameBoard = (function () {
     return { grid, setX, setO, setEmpty, showBoard }
 })()
 
+const createPlayers = function (name, startingPlayer) {
+
+}
+
 const checkGameOver = function () {
     grid = GameBoard.grid
     gameOver = false
@@ -40,31 +44,52 @@ const checkGameOver = function () {
     }
 
     if (grid.every(element => element !== '')) {
-        // Returns the game is tied
+        // Returns the game is tie
         gameOver = true
         winner = 'tie'
     }
-    // console.log(gameOver, winner, grid)
     return { gameOver, winner }
 }
 
 
 
 
-const displayGame = function () {
+const displayGame = (function () {
     document.getElementById('game-board').innerHTML = ''
+    let currentPlayer = 'O'
+    checkGameOver().gameOver
+
     let gameGrid = GameBoard.grid.map(function (value, index) {
         const gameCell = document.createElement('div')
         gameCell.classList.add('cell')
+
 
         const gameCellValue = document.createElement('p')
         gameCellValue.textContent = value
 
         gameCell.appendChild(gameCellValue)
         gameCell.addEventListener('click', () => {
-            return index
+            playGame(index, currentPlayer)
+            
+            if (currentPlayer == 'O') {
+                currentPlayer = 'X'
+                gameCellValue.textContent = currentPlayer
+
+            } else if (currentPlayer == 'X') {
+                currentPlayer = 'O'
+                gameCellValue.textContent = currentPlayer
+
+            } else {
+                console.log(checkGameOver().winner)
+            }
+
+            if (checkGameOver().gameOver == true) {
+                currentPlayer = 'none'
+            }
+            checkGameOver()
+            GameBoard.showBoard()
         })
-        return gameCell 
+        return gameCell
     })
 
     gameGrid.forEach(function (cell) {
@@ -72,22 +97,17 @@ const displayGame = function () {
     })
 
 
-}()
+})()
 
-const playGame = function () {
-    let currentPlayer = 'X'
+const playGame = function (inputValue, currentPlayer) {
+    const gameWinner = checkGameOver().winner
 
-    while (checkGameOver().gameOver !== true) {
-
-        if (currentPlayer == 'X') {
+    if (checkGameOver().gameOver == false) {
+        if (currentPlayer == 'O') {
             GameBoard.setX(inputValue)
         } else {
             GameBoard.setO(inputValue)
         }
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        checkGameOver()
-        displayGame()
     }
+    return currentPlayer
 }
-
-// playGame()
