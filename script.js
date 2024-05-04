@@ -8,10 +8,6 @@ const GameBoard = (function () {
     return { grid, setX, setO, setEmpty, showBoard }
 })()
 
-const createPlayers = function (name, startingPlayer) {
-
-}
-
 const checkGameOver = function () {
     grid = GameBoard.grid
     gameOver = false
@@ -49,7 +45,7 @@ const checkGameOver = function () {
         winner = 'tie'
     }
     gameWinnerDisplay = document.querySelector('#game-winner-display')
-    gameWinnerDisplay.textContent = 'The winner is: ' +  
+    gameWinnerDisplay.textContent = 'The winner is: ' + winner 
     return { gameOver, winner }
 }
 
@@ -68,10 +64,6 @@ const displayGame = (function () {
 
         const gameCellValue = document.createElement('p')
         gameCellValue.textContent = value
-
-        const clearCells = function () {
-            gameCellValue.textContent = ''
-        }
 
         gameCell.appendChild(gameCellValue)
         gameCell.addEventListener('click', () => {
@@ -102,6 +94,7 @@ const displayGame = (function () {
         restartButton.addEventListener('click', () => {
             restart()
             gameCellValue.textContent = ''
+            currentPlayer = 'O'
         })
         return gameCell
     })
@@ -126,9 +119,8 @@ const playGame = function (inputValue, currentPlayer) {
 }
 
 const restart = function () {
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 9; i++) {
         GameBoard.setEmpty(i)
     }
-    console.log('clicked')
     checkGameOver()
 }
