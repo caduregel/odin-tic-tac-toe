@@ -48,6 +48,8 @@ const checkGameOver = function () {
         gameOver = true
         winner = 'tie'
     }
+    gameWinnerDisplay = document.querySelector('#game-winner-display')
+    gameWinnerDisplay.textContent = 'The winner is: ' +  
     return { gameOver, winner }
 }
 
@@ -57,9 +59,9 @@ const checkGameOver = function () {
 const displayGame = (function () {
     document.getElementById('game-board').innerHTML = ''
     let currentPlayer = 'O'
-    checkGameOver().gameOver
+    // checkGameOver().gameOver 
 
-    let gameGrid = GameBoard.grid.map(function (value, index) {
+    const gameGrid = GameBoard.grid.map(function (value, index) {
         const gameCell = document.createElement('div')
         gameCell.classList.add('cell')
 
@@ -67,27 +69,39 @@ const displayGame = (function () {
         const gameCellValue = document.createElement('p')
         gameCellValue.textContent = value
 
+        const clearCells = function () {
+            gameCellValue.textContent = ''
+        }
+
         gameCell.appendChild(gameCellValue)
         gameCell.addEventListener('click', () => {
-            playGame(index, currentPlayer)
-            
-            if (currentPlayer == 'O') {
-                currentPlayer = 'X'
-                gameCellValue.textContent = currentPlayer
+            if (gameCellValue.textContent == '') {
+                playGame(index, currentPlayer)
 
-            } else if (currentPlayer == 'X') {
-                currentPlayer = 'O'
-                gameCellValue.textContent = currentPlayer
+                if (currentPlayer == 'O') {
+                    currentPlayer = 'X'
+                    gameCellValue.textContent = currentPlayer
 
-            } else {
-                console.log(checkGameOver().winner)
-            }
+                } else if (currentPlayer == 'X') {
+                    currentPlayer = 'O'
+                    gameCellValue.textContent = currentPlayer
 
-            if (checkGameOver().gameOver == true) {
-                currentPlayer = 'none'
+                } else {
+                    console.log(checkGameOver().winner)
+                }
+
+                if (checkGameOver().gameOver == true) {
+                    currentPlayer = 'none'
+                }
             }
             checkGameOver()
-            GameBoard.showBoard()
+            // GameBoard.showBoard()
+        })
+
+        const restartButton = document.querySelector('.button-6')
+        restartButton.addEventListener('click', () => {
+            restart()
+            gameCellValue.textContent = ''
         })
         return gameCell
     })
@@ -95,7 +109,6 @@ const displayGame = (function () {
     gameGrid.forEach(function (cell) {
         document.getElementById('game-board').appendChild(cell)
     })
-
 
 })()
 
@@ -110,4 +123,12 @@ const playGame = function (inputValue, currentPlayer) {
         }
     }
     return currentPlayer
+}
+
+const restart = function () {
+    for (i = 0; i < 8; i++) {
+        GameBoard.setEmpty(i)
+    }
+    console.log('clicked')
+    checkGameOver()
 }
