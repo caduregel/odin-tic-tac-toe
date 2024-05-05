@@ -36,16 +36,16 @@ const checkGameOver = function () {
             // Returns O has won
             gameOver = true
             winner = 'O'
+        } else if (grid.every(element => element !== '')) {
+            // Returns the game is tie
+            gameOver = true
+            winner = 'tie'
         }
     }
 
-    if (grid.every(element => element !== '')) {
-        // Returns the game is tie
-        gameOver = true
-        winner = 'tie'
-    }
+
     gameWinnerDisplay = document.querySelector('#game-winner-display')
-    gameWinnerDisplay.textContent = 'The winner is: ' + winner 
+    gameWinnerDisplay.textContent = 'The winner is: ' + winner
     return { gameOver, winner }
 }
 
@@ -85,6 +85,7 @@ const displayGame = (function () {
                 if (checkGameOver().gameOver == true) {
                     currentPlayer = 'none'
                 }
+                GameBoard.showBoard()
             }
             checkGameOver()
             // GameBoard.showBoard()
@@ -106,8 +107,6 @@ const displayGame = (function () {
 })()
 
 const playGame = function (inputValue, currentPlayer) {
-    const gameWinner = checkGameOver().winner
-
     if (checkGameOver().gameOver == false) {
         if (currentPlayer == 'O') {
             GameBoard.setX(inputValue)
@@ -115,6 +114,7 @@ const playGame = function (inputValue, currentPlayer) {
             GameBoard.setO(inputValue)
         }
     }
+    checkGameOver()
     return currentPlayer
 }
 
